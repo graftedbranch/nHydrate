@@ -114,6 +114,7 @@ namespace nHydrate.Generator.EFCodeFirst.Generators.Entity
             sb.AppendLine("using System.Data.Linq;");
             sb.AppendLine("using System.Data.Entity.ModelConfiguration;");
             sb.AppendLine("using System.ComponentModel.DataAnnotations;");
+            sb.AppendLine("using System.Data;");
             sb.AppendLine();
         }
 
@@ -1847,7 +1848,10 @@ namespace nHydrate.Generator.EFCodeFirst.Generators.Entity
             sb.AppendLine("						sql += \";select @@rowcount\";");
             sb.AppendLine("						sql = \"set ansi_nulls off;\" + sql;");
             sb.AppendLine("						cmd.CommandText = sql;");
-            sb.AppendLine("						dc.Connection.Open();");
+            sb.AppendLine("						if (dc.Connection.State != ConnectionState.Open)");
+            sb.AppendLine("						{");
+            sb.AppendLine("						    dc.Connection.Open();");
+            sb.AppendLine("						}");
             sb.AppendLine("						var startTime = DateTime.Now;");
             sb.AppendLine("						object p = cmd.ExecuteScalar();");
             sb.AppendLine("						var endTime = DateTime.Now;");
